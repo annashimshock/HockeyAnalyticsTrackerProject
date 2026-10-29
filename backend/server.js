@@ -47,6 +47,6 @@ app.get('/api/teams/:teamAbbrev', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Backend running live on http://localhost:${PORT}`);
 });

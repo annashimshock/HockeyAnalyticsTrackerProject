@@ -445,22 +445,6 @@ export default function Dashboard() {
                 2026–27 Live NHL Season Analytics Hub
               </p>
             </div>
-
-            <span
-              style={{
-                background: 'rgba(0,0,0,0.2)',
-                color: theme.primaryText,
-                border: `1px solid ${theme.secondary}`,
-                padding: '7px 12px',
-                borderRadius: '20px',
-                fontSize: '0.75rem',
-                fontWeight: '600',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-              }}
-            >
-              Connected • Port 5001
-            </span>
           </header>
 
           {/* Team selector */}
