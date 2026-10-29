@@ -1,20 +1,52 @@
 const express = require('express');
 const cors = require('cors');
+
 const app = express();
 const PORT = process.env.PORT || 5001;
 
 app.use(cors());
+app.use(express.json());
 
-// Endpoint to fetch live scores or schedule tailored for the Penguins
-app.get('/api/penguins-live', async (req, res) => {
+// Live team analytics endpoint
+app.get('/api/teams/:teamAbbrev', async (req, res) => {
     try {
-        const response = await fetch('https://api-web.nhle.com/v1/score/now');
-        const data = await response.json();
+        const teamAbbrev = req.params.teamAbbrev.toUpperCase();
+
+        const validTeams = [
+            'ANA', 'BOS', 'BUF', 'CAR', 'CBJ',
+            'CGY', 'CHI', 'COL', 'DAL', 'DET',
+            'EDM', 'FLA', 'LAK', 'MIN', 'MTL',
+            'NJD', 'NSH', 'NYI', 'NYR', 'OTT',
+            'PHI', 'PIT', 'SEA', 'SJS', 'STL',
+            'TBL', 'TOR', 'UTA', 'VAN', 'VGK',
+            'WPG', 'WSH'
+        ]
+
+        if(!validTeams.includes(teamAbbrev)) {
+            return res.status(400).json({
+                error: "Invalid NHL team abbreviation"
+            });
+        }
+
+        const response = await fetch(`https://api-web.nhle.com/v1/club-schedule-season/${teamAbbrev}/now`);
         
-        res.json(data);
+        if (!response.ok) {
+            throw new Error(`NHL API returned status ${response.status}`);
+        }
+
+        const nhlData = await response.json();
+
+        res.json({
+            team: teamAbbrev,
+            abbrev: teamAbbrev,
+            rawNhlData: nhlData
+        });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch live NHL data' });
+        console.error('Error fetching NHL data:', error.message);
+        res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
 });
 
-app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Backend running live on http://localhost:${PORT}`);
+});
