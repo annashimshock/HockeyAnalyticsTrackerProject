@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Pittsburgh Penguins Live Analytics Hub",
+  title: "Hockey Live Analytics Hub",
   description: "Real-time NHL analytics dashboard",
 };
 
